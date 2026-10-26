@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: robot-fleet-monitor
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fleet
+    username: fleet
+    password: fleet
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+fleet:
+  mqtt:
+    url: tcp://localhost:1883
+    client-id: fleet-monitor
+    status-topic: robots/+/status
+  online-ttl-seconds: 30
+  jwt:
+    # 데모용 비밀값. 실제 환경에서는 환경변수나 비밀 저장소에서 주입한다.
+    secret: change-this-demo-secret-to-at-least-32-bytes-long
+    ttl-minutes: 60
+  users:
+    - username: viewer
+      password: viewer123
+      role: VIEWER
+    - username: operator
+      password: operator123
+      role: OPERATOR
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+logging:
+  level:
+    io.github.mingssssss.fleet: INFO
+    org.springframework.integration.mqtt: INFO
